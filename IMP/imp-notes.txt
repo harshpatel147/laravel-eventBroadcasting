@@ -28,6 +28,16 @@
     for more details about redis in windows see https://stackoverflow.com/questions/6476945/how-do-i-run-redis-on-windows
 
 
+============================================================ MOST IMP ================================================================================
+
+If you need to implements class with event class in \App\Events dir as like below example 
+   
+   -:example:-   
+      class SendMessage implements ShouldBroadcast 
+      ----- OR -----
+      class SendMessage implements ShouldBroadcastNow
+   
+   then for debug event processing or not you can use `php artisan queue:work` OR `php artisan queue:listen`  
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 --------------------------------------------------- for test realtime notification -------------------------------------------------------------------
