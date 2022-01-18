@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class SendMessage
+class SendMessage implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -31,6 +31,27 @@ class SendMessage
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new Channel('user-channel');
+        // return new PrivateChannel('channel-name');
+    }
+
+    /**
+     * The event's broadcast name.
+     *
+     * @return string
+     */
+    public function broadcastAs()
+    {
+        return 'UserEvent';
+    }
+    
+    /**
+     * The event's broadcast name.
+     *
+     * @return string
+     */
+    public function broadcastWith()
+    {
+        return ['title'=>'This notification from ItSolutionStuff.com'];
     }
 }
