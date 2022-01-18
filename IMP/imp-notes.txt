@@ -1,0 +1,47 @@
+-: requirements :-
+ 1. predis 
+    for install run `composer require predis/predis`
+
+ 2. laravel-echo-server
+    for install run `npm install -g laravel-echo-server`
+
+    then after the installing Init Laravel-echo-server
+
+    run `laravel-echo-server init` 
+        Note: in windows this above command not works so, use `npx laravel-echo-server init` in windows
+
+        then it will create new file laravel-echo-server.json 
+
+ 3. then run `npm install` it will install requires node_modules like laravel mix etc
+
+ 4. laravel-echo
+    for install run `npm install laravel-echo` 
+
+ 5. socket.io-client 
+    for install run `npm install socket.io-client` ... but here latest version of socket.io-client (^4.4.1) not works properly (18th Jan, 2021) SO, I installed socket.io-client v2.4.0 (^2.4.0) using `npm install socket.io-client@2.4.0` command
+ 
+ 6. Redis server
+    for install run `sudo apt install redis-server` in linux but for install in windows visit https://github.com/microsoftarchive/redis/releases then download .zip & extract that zip file to specific location & then you need to run 1. redis-server.exe & 2. redis-cli.exe OR set that extracted file location path in windows environment variables globally : for my case I put extracted folder in C:\redis\Redis-x64-3.0.504 dir ... & I set that path C:\redis\Redis-x64-3.0.504 in environment variables in windows globally 
+    
+    then I need to run only `redis-server` for start redis-server command (we can run that command from any location) & run only `redis-cli` for start redis-cli 
+
+    for more details about redis in windows see https://stackoverflow.com/questions/6476945/how-do-i-run-redis-on-windows
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------- for test realtime notification -------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
+we need to start required server using below commands
+
+1. php artisan serve (for laravel development server start)
+2. redis-server (I set redis server globally in windows using windows environment variables)
+3. npx laravel-echo-server start (for windows) ----OR---- laravel-echo-server start (for Linux) (for LARAVEL ECHO SERVER Start)
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------- other IMP command ----------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
+1. npm run dev (for compiling assets using laravel mix)
+2. if you need redis-cli then run `redis-cli` (I set redis server globally in windows using windows environment variables)
+
+    
