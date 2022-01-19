@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,3 +23,13 @@ Route::get('/test', function () {
     event(new \App\Events\SendMessage());
     echo 'Event Run Successfully.';
 });
+
+Route::get('/testing', function () {
+    $user = User::find(1);
+    event(new \App\Events\NotifyUser($user));
+    echo 'Event Run Successfully.';
+});
+
+Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class, 'loginIndex'])->name('login'); //display login form...
+Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'checkLogin'])->name('login.post.check'); //Login form Post Check Credentials...
+Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout'); //Login form Post Check Credentials...
