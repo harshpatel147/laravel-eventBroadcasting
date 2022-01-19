@@ -49,6 +49,14 @@
                 i++;
                 $("#notification").append('<div class="alert alert-success">'+i+'.'+data.title+'</div>');
             });
+
+            companyId = "{{ (Auth::check()) ? auth()->user()->company_id : '' }}";
+            var companySubscribeChannel = window.Echo.private('companySubscribe.'+companyId);
+            companySubscribeChannel.listen('.App\\Events\\NotifyCompanySubscriber', (data) => {
+                console.log(data);
+                i++;
+                $("#notification").append('<div class="alert alert-success">'+i+'.'+data.title+'</div>');
+            });
         }
     </script>
 </html>

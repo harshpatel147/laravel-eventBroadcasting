@@ -21,3 +21,7 @@ Broadcast::channel('message.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
     // return true;
 });
+Broadcast::channel('companySubscribe.{id}', function ($user, $id) {
+    return (int) $user->company_id === (int) $id;
+    // return true;
+});

@@ -41,4 +41,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get the company's detail for the user.
+     * 
+     * one-to-one relationship
+     */
+    public function getcompanydetails()
+    {
+        return $this->hasOne(CompanyList::class, 'id', 'company_id');
+    }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\CompanyList;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,12 @@ Route::get('/test', function () {
 Route::get('/testing', function () {
     $user = User::find(1);
     event(new \App\Events\NotifyUser($user));
+    echo 'Event Run Successfully.';
+});
+
+Route::get('/notify/{companyId?}', function ($companyId = 1) {
+    echo $company = CompanyList::find($companyId);
+    event(new \App\Events\NotifyCompanySubscriber($company));
     echo 'Event Run Successfully.';
 });
 
