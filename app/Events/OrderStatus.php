@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CompanySubscriberRoom implements ShouldBroadcast
+class OrderStatus implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -33,9 +33,18 @@ class CompanySubscriberRoom implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PresenceChannel('companySubscribe.'.$this->company->id);
-        // return new PrivateChannel('companySubscribe.'. $this->company->id);
+        return new PrivateChannel('companySubscribe.'. $this->company->id);
     }
+
+    // /**
+    //  * The event's broadcast name.
+    //  *
+    //  * @return string
+    //  */
+    // public function broadcastAs()
+    // {
+    //     return 'NotifyCompanyUsers';
+    // }
 
     /**
      * The event's broadcast name.
@@ -44,6 +53,6 @@ class CompanySubscriberRoom implements ShouldBroadcast
      */
     public function broadcastWith()
     {
-        return ['title'=>'Notification Receives from the "company channel Room using PresenceChannel" : '. $this->company->company_name];
+        return ['title'=>'another noti. using PrivateChannel for testing leave-channel" : '. $this->company->company_name];
     }
 }

@@ -36,14 +36,15 @@
       
     <script type="text/javascript">
         var i = 0;
-        window.Echo.channel('user-channel')
+        window.Echo.channel('user-channel') // public channel
          .listen('.UserEvent', (data) => {
             console.log(data);
             i++;
             $("#notification").append('<div class="alert alert-success">'+i+'.'+data.title+'</div>');
+            window.Echo.leaveChannel('user-channel'); // to leave a channel 
         });
         if(authsession !== ''){
-            var privateChannel = window.Echo.private('message.1');
+            var privateChannel = window.Echo.private('message.1'); // private channel
             privateChannel.listen('.App\\Events\\NotifyUser', (data) => {
                 console.log(data);
                 i++;
@@ -56,6 +57,7 @@
                 console.log(data);
                 i++;
                 $("#notification").append('<div class="alert alert-success">'+i+'.'+data.title+'</div>');
+                window.Echo.leave('companySubscribe.'+companyId); // to leave a channel and also its associated private and presence channels
             });
         }
     </script>

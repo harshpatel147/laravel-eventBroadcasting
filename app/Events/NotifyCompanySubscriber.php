@@ -53,6 +53,6 @@ class NotifyCompanySubscriber implements ShouldBroadcast
      */
     public function broadcastWith()
     {
-        return ['title'=>'Notification Receives from the company: '. $this->company->company_name];
+        return ['title'=>'Notification Receives from the "company using PrivateChannel" : '. $this->company->company_name];
     }
 }

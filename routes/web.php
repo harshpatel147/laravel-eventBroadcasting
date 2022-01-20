@@ -53,3 +53,9 @@ Route::get('/group/notify/{companyId?}', function ($companyId = 1) {
     broadcast(new \App\Events\CompanySubscriberRoom($company))->toOthers();
     echo 'Event Run Successfully.';
 });
+
+Route::get('/order/notify/{companyId?}', function ($companyId = 1) {
+    echo $company = CompanyList::find($companyId);
+    event(new \App\Events\OrderStatus($company));
+    echo 'Event Run Successfully.';
+});

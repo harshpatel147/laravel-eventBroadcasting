@@ -37,17 +37,46 @@
     <script type="text/javascript">
         var i = 0;
         
+        var PresenceChannelCount = 0;
+        var PrivateChannelCount = 0;
+
         if(authsession !== ''){
             companyId = "{{ (Auth::check()) ? auth()->user()->company_id : '' }}";
-            var companySubscribeChannel = window.Echo.join('companySubscribeRoom.'+companyId)
+            var companySubscribePresenceChannel = window.Echo.join('companySubscribe.'+companyId) // Presence Channel
             .here( console.log("here event") )
             .joining( console.log("joining event") )
             .leaving( console.log("leaving event") )
             
-            companySubscribeChannel.listen('.App\\Events\\CompanySubscriberRoom', (data) => {
+            companySubscribePresenceChannel.listen('.App\\Events\\CompanySubscriberRoom', (data) => {
                 console.log(data);
                 i++;
                 $("#notification").append('<div class="alert alert-success">'+i+'.'+data.title+'</div>');
+                PresenceChannelCount++;
+                if(PresenceChannelCount == 3){
+                    companySubscribePresenceChannel.stopListening('.App\\Events\\CompanySubscriberRoom'); // for stop listening to a given event without leaving the channel
+                }
+            });
+            
+            var companySubscribePrivateChannel = window.Echo.private('companySubscribe.'+companyId);
+            
+            companySubscribePrivateChannel.listen('.App\\Events\\NotifyCompanySubscriber', (data) => {
+                console.log(data);
+                i++;
+                $("#notification").append('<div class="alert alert-success">'+i+'.'+data.title+'</div>');
+                PrivateChannelCount++;
+                if(PrivateChannelCount == 5){
+                    debugger;
+                    window.Echo.leave('companySubscribe.'+companyId); // to leave a channel and also its associated private and presence channels
+                }
+            })
+            .listen('.App\\Events\\OrderStatus', (data) => {
+                console.log(data);
+                i++;
+                $("#notification").append('<div class="alert alert-success">'+i+'.'+data.title+'</div>');
+                PrivateChannelCount++;
+                if(PrivateChannelCount == 5){
+                    window.Echo.leave('companySubscribe.'+companyId); // to leave a channel and also its associated private and presence channels
+                }
             });
         }
     </script>
