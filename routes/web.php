@@ -40,3 +40,16 @@ Route::get('/notify/{companyId?}', function ($companyId = 1) {
 Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class, 'loginIndex'])->name('login'); //display login form...
 Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'checkLogin'])->name('login.post.check'); //Login form Post Check Credentials...
 Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout'); //Login form Post Check Credentials...
+
+
+Route::get('/group', function () {
+    return view('group-notification-PresenceChannel');
+    // return view('welcome');
+});
+
+Route::get('/group/notify/{companyId?}', function ($companyId = 1) {
+    echo $company = CompanyList::find($companyId);
+    // event(new \App\Events\CompanySubscriberRoom($company));
+    broadcast(new \App\Events\CompanySubscriberRoom($company))->toOthers();
+    echo 'Event Run Successfully.';
+});
