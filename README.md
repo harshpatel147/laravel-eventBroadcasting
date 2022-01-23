@@ -1,66 +1,175 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+<h1>how to create real time event broadcasting system in Laravel with Redis, Socket.io. without using third party server like pusher</h1>
+<p>This is Example Source about real time event broadcasting system in Laravel with Redis, Socket.io. without using third party server like pusher</p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+<h3>-: Requirements :-</h3>
+<ol>
+    <li>laravel mix</li>
+    <li>Redis server</li>
+    <li>predis package</li>
+    <li>socket.io-client</li>
+    <li>laravel-echo-server</li>
+    <li>laravel-echo</li>
+</ol>
+<hr>
 
-## About Laravel
+<h3 id="test-example-source">Steps for test my example code</h3>
+<ol>
+<li> first of all, rename **.env.copy file with .env** </li>
+<li> run <code>composer install</code> </li>
+<li> run <code>npm install</code> </li>
+<li> install Redis Server (see below, about how to install) </li>
+<li> install laravel-echo-server (see below, about how to install, Initialize(Configuration) </li>
+<li> then start laravel development server `php artisan serve` </li>
+<li> start Redis Server </li>
+<li> then run `laravel-echo-server start` for start laravel echo server(Linux), for **windows** run `npx laravel-echo-server start` </li>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+then run following urls in browser 
+1. http://localhost:8000/
+2. http://localhost:8000/test
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+<hr>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+<p>Now, let's see step by step</p>
 
-## Learning Laravel
+<h4>Step 1: </h4> install predis using following command <code>composer require predis/predis</code>
+<h4>Step 2: </h4> create even for BroadCasting. in event file you need to set channel & message which you wants to send. run <code>php artisan make:event SendMessage</code>
+& then write channel & message in **app/Events/SendMessage.php** as like <a href="https://github.com/harshpatel147/laravel-eventBroadcasting/blob/main/app/Events/SendMessage.php">this app/Events/SendMessage.php</a> file
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+<h4>Step 3: </h4> Update Configuration in **.env** file
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+<code>
+    BROADCAST_DRIVER=redis
+    
+    REDIS_HOST=127.0.0.1
+    REDIS_PASSWORD=null
+    REDIS_PORT=6379
+    
+    LARAVEL_ECHO_PORT=6001
+</code>
 
-## Laravel Sponsors
+<h4>Step 4: </h4> Update Configuration in **config/database.php** file
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+<code>
+    ...
+    
+    'redis' => [
+        // 'client' => env('REDIS_CLIENT', 'phpredis'),
+        'client' => env('REDIS_CLIENT', 'predis'),
 
-### Premium Partners
+        'options' => [
+            'cluster' => env('REDIS_CLUSTER', 'redis'),
+            // 'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', ''),
+        ],
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-- **[Romega Software](https://romegasoftware.com)**
+        'default' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_DB', '0'),
+        ],
 
-## Contributing
+        'cache' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_CACHE_DB', '1'),
+        ],
+    ]
+  ...
+</code>
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+& then run `php artisan migrate` for db table create
 
-## Code of Conduct
+<h4>Step 5: </h4> Install laravel-echo-server using following command <code>npm install -g laravel-echo-server</code>
+ after installing the laravel-echo-server run <code>laravel-echo-server init</code> for Init Laravel Echo Server (command works only in Linux) & You have to setup your configuration.
+ 
+ **Note:- If you are using the Windows OS then use <code>npx laravel-echo-server init</code>**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+above Init laravel-echo-server command will create new file laravel-echo-server.json file as like bellow:
 
-## Security Vulnerabilities
+<code>
+    {
+	"authHost": "http://localhost:8000",
+	"authEndpoint": "/broadcasting/auth",
+	"clients": [],
+	"database": "redis",
+	"databaseConfig": {
+		"redis": {
+			"port": "6379",
+	        "host": "127.0.0.1"
+		},
+		"sqlite": {
+			"databasePath": "/database/laravel-echo-server.sqlite"
+		}
+	},
+	"devMode": true,
+	"host": null,
+	"port": "6001",
+	"protocol": "http",
+	"socketio": {},
+	"secureOptions": 67108864,
+	"sslCertPath": "",
+	"sslKeyPath": "",
+	"sslCertChainPath": "",
+	"sslPassphrase": "",
+	"subscribers": {
+		"http": true,
+		"redis": true
+	},
+	"apiOriginAllow": {
+		"allowCors": false,
+		"allowOrigin": "",
+		"allowMethods": "",
+		"allowHeaders": ""
+	}
+}
+</code>
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+<h4>Step 6: </h4> now install npm , run <code>npm install</code>
+<h4>Step 7: </h4> install laravel-echo & socket.io-client using below command
 
-## License
+<code>npm install laravel-echo</code> & <code> npm install socket.io-client@2.4.0 </code>
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+<h4>Step 8: </h4> create <a href="https://github.com/harshpatel147/laravel-eventBroadcasting/blob/main/resources/js/laravel-echo-setup.js">resources/js/laravel-echo-setup.js file </a>
+
+& then add on mix file 
+
+<h5>webpack.mix.js</h5>
+
+<code>mix.js('resources/js/laravel-echo-setup.js', 'public/js');</code>
+
+& then afer compile it using <code>npm run dev</code> command
+
+then create View File as like this <a href="https://github.com/harshpatel147/laravel-eventBroadcasting/blob/main/resources/views/notification-test.blade.php">resources/views/notification-test.blade.php</a> my view file
+
+<p>create route in routes/web.php file</p>
+
+<code>Route::get('/', function () {
+    return view('notification-test');
+    // return view('welcome');
+});
+
+Route::get('/test', function () {
+    event(new \App\Events\SendMessage());
+    echo 'Event Run Successfully.';
+});
+
+</code>
+
+<h4> Step 9: </h4> install redis server using <code>sudo apt install redis-server</code> (for Linux).
+    
+<p><strong>NOTE: if you are Windows OS user, then visit https://github.com/microsoftarchive/redis/releases then download .zip & extract that zip file to specific location & then you need to run 1. redis-server.exe & 2. redis-cli.exe OR set that extracted file location path in windows environment variables globally : </strong></p>
+        
+<p>for my case I put extracted folder in C:\redis\Redis-x64-3.0.504 dir ... & I set that path C:\redis\Redis-x64-3.0.504 in environment variables in windows globally then I need to run only `redis-server` for start redis-server command (we can run that command from any location) & run only `redis-cli` for start redis-cli </p>
+    
+<p>for more details about redis in windows see <a href="https://stackoverflow.com/questions/6476945/how-do-i-run-redis-on-windows">https://stackoverflow.com/questions/6476945/how-do-i-run-redis-on-windows</a></p>
+    
+
+<p>Now, we need to start laravel development server, laravel-echo-server, & redis server for Run Project <a href="#test-example-source">see above steps</p> 
+    
+<h4>If you face any problem, <a href="https://github.com/harshpatel147/laravel-eventBroadcasting/blob/main/IMP/imp-notes.txt">This Text Note of this Repository</a></h4>
+    
+I hope this helps to someone...
