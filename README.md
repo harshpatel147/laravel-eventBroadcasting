@@ -96,7 +96,7 @@ This is an example source for a real-time event broadcasting system in Laravel u
     ```bash
     npm install -g laravel-echo-server
     ```
-    After installing, run `laravel-echo-server init` (Linux) or `npx laravel-echo-server init` (Windows) to initialize Laravel Echo Server and set up configurations. The configurations will be saved in laravel-echo-server.json.
+    After installing, run `laravel-echo-server init` (Linux) or `npx laravel-echo-server init` (Windows) to initialize Laravel Echo Server and set up configurations. The configurations will be saved in `laravel-echo-server.json`.
 
     ```json
     {
@@ -143,14 +143,14 @@ This is an example source for a real-time event broadcasting system in Laravel u
     ```bash
     npm install laravel-echo socket.io-client@2.4.0
     ```
-8. Create the [resources/js/laravel-echo-setup.js file](./resources/js/laravel-echo-setup.js). Add the following to webpack.mix.js and compile using `npm run dev`:
+8. Create the [`resources/js/laravel-echo-setup.js` file](./resources/js/laravel-echo-setup.js). Add the following to `webpack.mix.js` and compile using `npm run dev`:
 
     ```js
     mix.js('resources/js/laravel-echo-setup.js', 'public/js');
     ```
 
-    - Create a view file like [resources/views/notification-test.blade.php](./resources/views/notification-test.blade.php).
-    - Create a route in routes/web.php:
+    - Create a view file like [`resources/views/notification-test.blade.php`](./resources/views/notification-test.blade.php).
+    - Create a route in `routes/web.php`:
 
         ```php
         Route::get('/', function () {
