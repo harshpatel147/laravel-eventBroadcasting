@@ -36,15 +36,15 @@
       
     <script type="text/javascript">
         window.Echo.connector.socket.on('connect', () => {
-            console.log('Connected to WebSocket');
+            console.log('%c Connected to WebSocket', 'background: blue; color: white');
         });
 
         window.Echo.connector.socket.on('reconnecting', () => {
-            console.log('ReConnecting to WebSocket');
+            console.log('%c ReConnecting to WebSocket', 'background: yellow; color: green');
         });
 
         window.Echo.connector.socket.on('disconnect', () => {
-            console.log('Disconnected from WebSocket');
+            console.log('%c Disconnected from WebSocket', 'background: red; color: white');
         });
 
         var i = 0;

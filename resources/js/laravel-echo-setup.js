@@ -12,5 +12,5 @@ if (typeof window.io !== "undefined") {
     });
     console.log('Connected to socket.io');
 }else{
-    console.log('Not connected to socket.io');
+    console.error('socket.io-client not found');
 }
