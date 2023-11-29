@@ -1,43 +1,53 @@
-<h1>how to create real time event broadcasting system in Laravel with Redis, Socket.io. without using third party server like pusher</h1>
-<p>This is Example Source about real time event broadcasting system in Laravel with Redis, Socket.io. without using third party server like pusher</p>
+# Real-time Event Broadcasting System in Laravel with Redis and Socket.io
 
-<h3>-: Requirements :-</h3>
-<ol>
-    <li>laravel mix</li>
-    <li>Redis server</li>
-    <li>predis package</li>
-    <li>socket.io-client</li>
-    <li>laravel-echo-server</li>
-    <li>laravel-echo</li>
-</ol>
-<hr>
+This is an example source for a real-time event broadcasting system in Laravel using Redis and Socket.io without relying on third-party servers like Pusher.
 
-<h3 id="test-example-source">Steps for test my example code</h3>
-<ol>
-<li> first of all, rename **.env.copy file with .env** </li>
-<li> run <code>composer install</code> </li>
-<li> run <code>npm install</code> </li>
-<li> install Redis Server (see below, about how to install) </li>
-<li> install laravel-echo-server (see below, about how to install, Initialize(Configuration) </li>
-<li> then start laravel development server `php artisan serve` </li>
-<li> start Redis Server </li>
-<li> then run `laravel-echo-server start` for start laravel echo server(Linux), for **windows** run `npx laravel-echo-server start` </li>
+## Requirements:
 
-then run following urls in browser 
-1. http://localhost:8000/
-2. http://localhost:8000/test
+- Laravel Mix
+- Redis Server
+- Predis Package
+- Socket.io-client
+- Laravel-echo-server
+- Laravel-echo
 
-<hr>
+## Steps to Test the Example Code:
 
-<p>Now, let's see step by step</p>
+1. Clone this repository and rename the **`.env.copy` file to `.env`**
+2. Run the following commands:
+    ```bash
+    composer install
+    npm install
+    ```
+3. Install **Redis Server** [see below, point number 9 about how to Install Redis Server](#step-by-step-explanation)
+4. Install **laravel-echo-server** [see below, point number 5 about how to install, Initialize(Configuration)](#step-by-step-explanation)
+5. Start the Laravel development server using the command: 
+   ```bash
+   php artisan serve
+   ```
+6. Start Redis Server
+7. Start laravel echo server by following command:
+   - for Linux: Run `laravel-echo-server start`
+   - for Windows: Run `npx laravel-echo-server start`
+8. Open following urls in browser:
+   -  http://localhost:8000/
+   -  http://localhost:8000/test
 
-<h4>Step 1: </h4> install predis using following command <code>composer require predis/predis</code>
-<h4>Step 2: </h4> create even for BroadCasting. in event file you need to set channel & message which you wants to send. run <code>php artisan make:event SendMessage</code>
-& then write channel & message in **app/Events/SendMessage.php** as like <a href="https://github.com/harshpatel147/laravel-eventBroadcasting/blob/main/app/Events/SendMessage.php">this app/Events/SendMessage.php</a> file
 
-<h4>Step 3: </h4> Update Configuration in **.env** file
+## Step by step explanation
 
-<code>
+1. Install **Predis** using the following command: 
+    ```bash
+    composer require predis/predis
+    ```
+2. Create an event for broadcasting. Run the command:
+    ```bash
+    php artisan make:event SendMessage
+    ```
+    Then, set the channel and message in **app/Events/SendMessage.php** as shown in [this example file](./app/Events/SendMessage.php).
+
+3. Update the configuration in the **`.env`** file:
+    ```.env
     BROADCAST_DRIVER=redis
     
     REDIS_HOST=127.0.0.1
@@ -45,11 +55,13 @@ then run following urls in browser
     REDIS_PORT=6379
     
     LARAVEL_ECHO_PORT=6001
-</code>
-
-<h4>Step 4: </h4> Update Configuration in **config/database.php** file
-
-<code>
+    ```
+4. Update the configuration in **`config/database.php`** and run:
+    ```bash
+    php artisan migrate
+    ```
+   ```php
+    // config/database.php
     ...
     
     'redis' => [
@@ -78,98 +90,88 @@ then run following urls in browser
             'database' => env('REDIS_CACHE_DB', '1'),
         ],
     ]
-  ...
-</code>
+    ...
+   ```
+5. Install **laravel-echo-server** using the following command:
+    ```bash
+    npm install -g laravel-echo-server
+    ```
+    After installing, run `laravel-echo-server init` (Linux) or `npx laravel-echo-server init` (Windows) to initialize Laravel Echo Server and set up configurations. The configurations will be saved in laravel-echo-server.json.
 
-& then run `php artisan migrate` for db table create
-
-<h4>Step 5: </h4> Install laravel-echo-server using following command <code>npm install -g laravel-echo-server</code>
- after installing the laravel-echo-server run <code>laravel-echo-server init</code> for Init Laravel Echo Server (command works only in Linux) & You have to setup your configuration.
- 
- **Note:- If you are using the Windows OS then use <code>npx laravel-echo-server init</code>**
-
-above Init laravel-echo-server command will create new file laravel-echo-server.json file as like bellow:
-
-<code>
+    ```json
     {
-	"authHost": "http://localhost:8000",
-	"authEndpoint": "/broadcasting/auth",
-	"clients": [],
-	"database": "redis",
-	"databaseConfig": {
-		"redis": {
-			"port": "6379",
-	        "host": "127.0.0.1"
-		},
-		"sqlite": {
-			"databasePath": "/database/laravel-echo-server.sqlite"
-		}
-	},
-	"devMode": true,
-	"host": null,
-	"port": "6001",
-	"protocol": "http",
-	"socketio": {},
-	"secureOptions": 67108864,
-	"sslCertPath": "",
-	"sslKeyPath": "",
-	"sslCertChainPath": "",
-	"sslPassphrase": "",
-	"subscribers": {
-		"http": true,
-		"redis": true
-	},
-	"apiOriginAllow": {
-		"allowCors": false,
-		"allowOrigin": "",
-		"allowMethods": "",
-		"allowHeaders": ""
-	}
-}
-</code>
+        "authHost": "http://localhost:8000",
+        "authEndpoint": "/broadcasting/auth",
+        "clients": [],
+        "database": "redis",
+        "databaseConfig": {
+            "redis": {
+                "port": "6379",
+                "host": "127.0.0.1"
+            },
+            "sqlite": {
+                "databasePath": "/database/laravel-echo-server.sqlite"
+            }
+        },
+        "devMode": true,
+        "host": null,
+        "port": "6001",
+        "protocol": "http",
+        "socketio": {},
+        "secureOptions": 67108864,
+        "sslCertPath": "",
+        "sslKeyPath": "",
+        "sslCertChainPath": "",
+        "sslPassphrase": "",
+        "subscribers": {
+            "http": true,
+            "redis": true
+        },
+        "apiOriginAllow": {
+            "allowCors": false,
+            "allowOrigin": "",
+            "allowMethods": "",
+            "allowHeaders": ""
+        }
+    }
+    ```
+6. Install Node Modules by running: 
+    ```bash
+    npm install
+    ```
+7. Install Laravel Echo and Socket.io-client:
+    ```bash
+    npm install laravel-echo socket.io-client@2.4.0
+    ```
+8. Create the [resources/js/laravel-echo-setup.js file](./resources/js/laravel-echo-setup.js). Add the following to webpack.mix.js and compile using `npm run dev`:
 
-<h4>Step 6: </h4> now install npm , run <code>npm install</code>
-<h4>Step 7: </h4> install laravel-echo & socket.io-client using below command
+    ```js
+    mix.js('resources/js/laravel-echo-setup.js', 'public/js');
+    ```
 
-<code>npm install laravel-echo</code> & <code> npm install socket.io-client@2.4.0 </code>
+    - Create a view file like [resources/views/notification-test.blade.php](./resources/views/notification-test.blade.php).
+    - Create a route in routes/web.php:
 
-<h4>Step 8: </h4> create <a href="https://github.com/harshpatel147/laravel-eventBroadcasting/blob/main/resources/js/laravel-echo-setup.js">resources/js/laravel-echo-setup.js file </a>
+        ```php
+        Route::get('/', function () {
+            return view('notification-test');
+            // return view('welcome');
+        });
 
-& then add on mix file 
-
-<h5>webpack.mix.js</h5>
-
-<code>mix.js('resources/js/laravel-echo-setup.js', 'public/js');</code>
-
-& then afer compile it using <code>npm run dev</code> command
-
-then create View File as like this <a href="https://github.com/harshpatel147/laravel-eventBroadcasting/blob/main/resources/views/notification-test.blade.php">resources/views/notification-test.blade.php</a> my view file
-
-<p>create route in routes/web.php file</p>
-
-<code>Route::get('/', function () {
-    return view('notification-test');
-    // return view('welcome');
-});
-
-Route::get('/test', function () {
-    event(new \App\Events\SendMessage());
-    echo 'Event Run Successfully.';
-});
-
-</code>
-
-<h4> Step 9: </h4> install redis server using <code>sudo apt install redis-server</code> (for Linux).
+        Route::get('/test', function () {
+            event(new \App\Events\SendMessage());
+            echo 'Event Run Successfully.';
+        });
+        ```
+9. Install **Redis Server** using:
+    - For Linux: `sudo apt install redis-server`
+    - For Windows: [Download from Microsoft Archive Redis Releases](https://github.com/microsoftarchive/redis/releases) and extract zip file to specific location. Follow the instructions for installation. You can either run `redis-server.exe` and `redis-cli.exe` directly or set the extracted folder location in the Windows environment variables globally.
+       > for my case: I put extracted folder in **C:\redis\Redis-x64-3.0.504** directory & I set that path `C:\redis\Redis-x64-3.0.504` in the Windows environment variables globally. then I need to run only `redis-server` command for start the redis-server (we can run that command from any location) & run only `redis-cli` command for start redis-cli
     
-<p><strong>NOTE: if you are Windows OS user, then visit https://github.com/microsoftarchive/redis/releases then download .zip & extract that zip file to specific location & then you need to run 1. redis-server.exe & 2. redis-cli.exe OR set that extracted file location path in windows environment variables globally : </strong></p>
-        
-<p>for my case I put extracted folder in C:\redis\Redis-x64-3.0.504 dir ... & I set that path C:\redis\Redis-x64-3.0.504 in environment variables in windows globally then I need to run only `redis-server` for start redis-server command (we can run that command from any location) & run only `redis-cli` for start redis-cli </p>
-    
-<p>for more details about redis in windows see <a href="https://stackoverflow.com/questions/6476945/how-do-i-run-redis-on-windows">https://stackoverflow.com/questions/6476945/how-do-i-run-redis-on-windows</a></p>
-    
+    > Note: For more details about Redis on Windows, [refer to this Stack Overflow question](https://stackoverflow.com/q/6476945).
 
-<p>Now, we need to start laravel development server, laravel-echo-server, & redis server for Run Project <a href="#test-example-source">see above steps</p> 
-    
-<h4>If you face any problem, <a href="https://github.com/harshpatel147/laravel-eventBroadcasting/blob/main/IMP/imp-notes.txt">This Text Note of this Repository</a></h4>
-    
-I hope this helps to someone...
+All Done! Now, start the Laravel development server, Laravel Echo Server, and Redis Server to run the project [See above steps](#steps-to-test-the-example-code).
+
+If you encounter any issues, [refer to this text note in the repository](./IMP/imp-notes.txt).
+
+I hope this helps! Happy coding!
