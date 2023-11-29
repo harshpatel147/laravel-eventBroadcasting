@@ -35,6 +35,18 @@
     <script src="{{ url('/js/laravel-echo-setup.js') }}" type="text/javascript"></script>
       
     <script type="text/javascript">
+        window.Echo.connector.socket.on('connect', () => {
+            console.log('Connected to WebSocket');
+        });
+
+        window.Echo.connector.socket.on('reconnecting', () => {
+            console.log('ReConnecting to WebSocket');
+        });
+
+        window.Echo.connector.socket.on('disconnect', () => {
+            console.log('Disconnected from WebSocket');
+        });
+
         var i = 0;
         window.Echo.channel('user-channel') // public channel
          .listen('.UserEvent', (data) => {
